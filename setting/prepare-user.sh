@@ -17,7 +17,7 @@ do
   password=$(echo "$line" | cut -d"$fileDelimiter" -f3)
 
   # Usuario
-  echo "Usuario: $username, Correo: $email"
+  echo "Usuario: $username, Correo: $email, Passord: $password"
 
   # Crear el usuario IAM
   aws iam create-user --user-name "$username"
