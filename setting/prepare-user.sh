@@ -12,8 +12,8 @@ x
 while IFS= read -r line
 do
   # Obteniendo el nombre de usuario y correo electrónico de la línea
-  username=$(echo "$line" | cut -d"$delimiter" -f1)
-  email=$(echo "$line" | cut -d"$delimiter" -f2)
+  username=$(echo "$line" | cut -d"$fileDelimiter" -f1)
+  email=$(echo "$line" | cut -d"$fileDelimiter" -f2)
 
   # Usuario
   echo "Usuario: $username, Correo: $email"
