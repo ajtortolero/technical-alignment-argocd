@@ -22,20 +22,27 @@ do
   # Usuario
   echo "Usuario: $username, Correo: $email, Passord: $password"
 
+  # Verificar si el usuario tiene un perfil de inicio de sesión
+  profileExists=$(aws iam list-user-profiles --user-name "$username" --query 'length(ProfileUsers)')
+
+  if [ "$login_profile_exists" -gt 0 ]; then
+    # Eliminar el perfil de inicio de sesión del usuario
+    aws iam delete-login-profile --user-name "$username"
+    echo "Perfil de inicio de sesión eliminado para el usuario: $username"
+
+    # Eliminar el usuario IAM
+    aws iam delete-user --user-name "$username"
+    echo "Usuari eliminado: $username"
+  fi
+
   # Crear el usuario IAM
   aws iam create-user --user-name "$username"
-  
+
   # grega política al usuario
   aws iam attach-user-policy --policy-arn "$policyIAM" --user-name "$username"
   
   # Crear un perfil de login para el usuario con contraseña
   aws iam create-login-profile --user-name "$username" --password "$password"
-
-  # Agregar el usuario al grupo IAM
-  # aws iam add-user-to-group --user-name "$username" --group-name "$groupIAM"
-
-  # Asignar una política que otorgue acceso completo a todos los servicios de AWS al usuario
-  # aws iam attach-user-policy --policy-arn arn:aws:iam::aws:policy/AdministratorAccess --user-name "$username"
 
   # Generar y mostrar las credenciales de acceso del usuario
   access_key_info=$(aws iam create-access-key --user-name "$username")
