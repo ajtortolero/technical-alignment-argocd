@@ -14,6 +14,7 @@ do
   # Obteniendo el nombre de usuario y correo electrónico de la línea
   username=$(echo "$line" | cut -d"$fileDelimiter" -f1)
   email=$(echo "$line" | cut -d"$fileDelimiter" -f2)
+  password=$(echo "$line" | cut -d"$fileDelimiter" -f3)
 
   # Usuario
   echo "Usuario: $username, Correo: $email"
@@ -22,10 +23,13 @@ do
   aws iam create-user --user-name "$username"
 
   # Agregar el usuario al grupo IAM
-  aws iam add-user-to-group --user-name "$username" --group-name "$groupIAM"
+  # aws iam add-user-to-group --user-name "$username" --group-name "$groupIAM"
 
   # Asignar una política que otorgue acceso completo a todos los servicios de AWS al usuario
-  aws iam attach-user-policy --policy-arn arn:aws:iam::aws:policy/AdministratorAccess --user-name "$username"
+  # aws iam attach-user-policy --policy-arn arn:aws:iam::aws:policy/AdministratorAccess --user-name "$username"
+
+  # Crear un perfil de login para el usuario con contraseña
+  aws iam create-login-profile --user-name "$username" --password "$password" --password-reset-required
 
   # Generar y mostrar las credenciales de acceso del usuario
   access_key_info=$(aws iam create-access-key --user-name "$username")
