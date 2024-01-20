@@ -19,20 +19,20 @@ do
   echo "Usuario: $username, Correo: $email"
 
   # Crear el usuario IAM
-  aws iam create-user --user-name "$email"
+  aws iam create-user --user-name "$username"
 
   # Agregar el usuario al grupo IAM
-  aws iam add-user-to-group --user-name "$email" --group-name "$groupIAM"
+  aws iam add-user-to-group --user-name "$username" --group-name "$groupIAM"
 
   # Asignar una política que otorgue acceso completo a todos los servicios de AWS al usuario
-  aws iam attach-user-policy --policy-arn arn:aws:iam::aws:policy/AdministratorAccess --user-name "$email"
+  aws iam attach-user-policy --policy-arn arn:aws:iam::aws:policy/AdministratorAccess --user-name "$username"
 
   # Generar y mostrar las credenciales de acceso del usuario
-  access_key_info=$(aws iam create-access-key --user-name "$email")
+  access_key_info=$(aws iam create-access-key --user-name "$username")
   access_key_id=$(echo "$access_key_info" | jq -r '.AccessKey.AccessKeyId')
   secret_access_key=$(echo "$access_key_info" | jq -r '.AccessKey.SecretAccessKey')
 
-  echo "Usuario: $email"
+  echo "Usuario: $username"
   echo "Access Key ID: $access_key_id"
   echo "Secret Access Key: $secret_access_key"
   echo "-----------------------------------"
