@@ -3,7 +3,7 @@
 # Nombre del archivo que contiene la lista de correos electrónicos
 file="prepare-user.txt"
 fileDelimiter=" "
-
+fileOutput="prepare-user-created.txt"
 # Nombre del grupo de IAM al que se agregarán los usuarios
 groupIAM="GrupoFullAccess"
 x
@@ -32,7 +32,7 @@ do
   # aws iam attach-user-policy --policy-arn arn:aws:iam::aws:policy/AdministratorAccess --user-name "$username"
 
   # Crear un perfil de login para el usuario con contraseña
-  aws iam create-login-profile --user-name "$username" --password "$password" --password-reset-required
+  aws iam create-login-profile --user-name "$username" --password "$password" # s--password-reset-required
 
   # Generar y mostrar las credenciales de acceso del usuario
   access_key_info=$(aws iam create-access-key --user-name "$username")
@@ -42,6 +42,7 @@ do
   echo "Usuario: $username"
   echo "Access Key ID: $access_key_id"
   echo "Secret Access Key: $secret_access_key"
-  echo "-----------------------------------"
+
+  echo "Usuario: $username, Contraseña: $password, Access Key ID: $access_key_id, Secret Access Key: $secret_access_key" >> "$fileOutput"
 
 done < "$file"
