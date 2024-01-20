@@ -6,7 +6,8 @@ fileDelimiter=" "
 fileOutput="prepare-user-created.txt"
 # Nombre del grupo de IAM al que se agregarán los usuarios
 groupIAM="GrupoFullAccess"
-policyIAM=$(aws iam list-policies --query 'Policies[?PolicyName==`allow_all`].Arn' --output text)
+policyIAMAll=$(aws iam list-policies --query 'Policies[?PolicyName==`allow_all`].Arn' --output text)
+policyIAMSandbox=$(aws iam list-policies --query 'Policies[?PolicyName==`Playground_AWS_Sandbox`].Arn' --output text)
 
 # Iterar a través de la lista de correos y crear usuarios en IAM con claves de acceso
 while IFS= read -r line
@@ -14,7 +15,6 @@ do
   # Obteniendo el nombre de usuario y correo electrónico de la línea
   username=$(echo "$line" | cut -d"$fileDelimiter" -f1)
   email=$(echo "$line" | cut -d"$fileDelimiter" -f2)
-  # password=$(echo "$line" | cut -d"$fileDelimiter" -f3)
   password=$(cat /dev/urandom | tr -dc 'a-z' | fold -w 6 | head -n 1)$(cat /dev/urandom | tr -dc 'A-Z' | fold -w 6 | head -n 1)$(cat /dev/urandom | tr -dc '0-9' | fold -w 6 | head -n 1)$(cat /dev/urandom | tr -dc '!@#$%^&*()_+' | fold -w 4 | head -n 1)
 
   echo "Contraseña generada: $password"
@@ -25,8 +25,11 @@ do
   # Crear el usuario IAM
   aws iam create-user --user-name "$username"
 
-  # grega política al usuario
-  aws iam attach-user-policy --policy-arn "$policyIAM" --user-name "$username"
+  # Agrega política al usuario
+  aws iam attach-user-policy --policy-arn "$policyIAMAll" --user-name "$username"
+
+  # Agrega política al usuario
+  aws iam attach-user-policy --policy-arn "$policyIAMSandbox" --user-name "$username"  
   
   # Crear un perfil de login para el usuario con contraseña
   aws iam create-login-profile --user-name "$username" --password "$password"
