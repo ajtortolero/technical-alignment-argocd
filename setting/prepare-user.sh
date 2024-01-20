@@ -28,11 +28,11 @@ do
   if [ "$login_profile_exists" -gt 0 ]; then
     # Eliminar el perfil de inicio de sesión del usuario
     aws iam delete-login-profile --user-name "$username"
-    echo "Perfil de inicio de sesión eliminado para el usuario: $username"
+    echo "User profile deleted: $username"
 
     # Eliminar el usuario IAM
     aws iam delete-user --user-name "$username"
-    echo "Usuari eliminado: $username"
+    echo "User deleted: $username"
   fi
 
   # Crear el usuario IAM
