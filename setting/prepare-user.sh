@@ -4,7 +4,7 @@
 file="prepare-user.txt"
 
 # Nombre del grupo de IAM al que se agregarán los usuarios
-group_iam="GrupoFullAccess"
+groupIAM="GrupoFullAccess"
 
 # Iterar a través de la lista de correos y crear usuarios en IAM con claves de acceso
 while IFS= read -r email
