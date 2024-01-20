@@ -39,10 +39,6 @@ do
   access_key_id=$(echo "$access_key_info" | jq -r '.AccessKey.AccessKeyId')
   secret_access_key=$(echo "$access_key_info" | jq -r '.AccessKey.SecretAccessKey')
 
-  echo "Usuario: $username"
-  echo "Access Key ID: $access_key_id"
-  echo "Secret Access Key: $secret_access_key"
-
   echo "Usuario: $username, Contraseña: $password, Access Key ID: $access_key_id, Secret Access Key: $secret_access_key" >> "$fileOutput"
 
 done < "$file"
