@@ -2,14 +2,21 @@
 
 # Nombre del archivo que contiene la lista de correos electrónicos
 file="prepare-user.txt"
+fileDelimiter=" "
 
 # Nombre del grupo de IAM al que se agregarán los usuarios
 groupIAM="GrupoFullAccess"
+x
 
 # Iterar a través de la lista de correos y crear usuarios en IAM con claves de acceso
-while IFS= read -r email
+while IFS= read -r line
 do
-  echo "Usuario: $email"
+  # Obteniendo el nombre de usuario y correo electrónico de la línea
+  username=$(echo "$line" | cut -d"$delimiter" -f1)
+  email=$(echo "$line" | cut -d"$delimiter" -f2)
+
+  # Usuario
+  echo "Usuario: $username, Correo: $email"
 
   # Crear el usuario IAM
   aws iam create-user --user-name "$email"
