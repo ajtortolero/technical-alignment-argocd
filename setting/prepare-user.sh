@@ -22,18 +22,18 @@ do
   # Usuario
   echo "Usuario: $username, Correo: $email, Passord: $password"
 
-  # Verificar si el usuario tiene un perfil de inicio de sesión
-  profileExists=$(aws iam list-user-profiles --user-name "$username" --query 'length(ProfileUsers)')
+  # # Verificar si el usuario tiene un perfil de inicio de sesión
+  # profileExists=$(aws iam list-user-profiles --user-name "$username" --query 'length(ProfileUsers)')
 
-  if [ "$login_profile_exists" -gt 0 ]; then
-    # Eliminar el perfil de inicio de sesión del usuario
-    aws iam delete-login-profile --user-name "$username"
-    echo "User profile deleted: $username"
+  # if [ "$login_profile_exists" -gt 0 ]; then
+  #   # Eliminar el perfil de inicio de sesión del usuario
+  #   aws iam delete-login-profile --user-name "$username"
+  #   echo "User profile deleted: $username"
 
-    # Eliminar el usuario IAM
-    aws iam delete-user --user-name "$username"
-    echo "User deleted: $username"
-  fi
+  #   # Eliminar el usuario IAM
+  #   aws iam delete-user --user-name "$username"
+  #   echo "User deleted: $username"
+  # fi
 
   # Crear el usuario IAM
   aws iam create-user --user-name "$username"
