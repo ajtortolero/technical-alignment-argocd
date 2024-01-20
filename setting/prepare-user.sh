@@ -6,7 +6,7 @@ fileDelimiter=" "
 fileOutput="prepare-user-created.txt"
 # Nombre del grupo de IAM al que se agregarán los usuarios
 groupIAM="GrupoFullAccess"
-x
+policyIAM=$(aws iam list-policies --query 'Policies[?PolicyName==`allow_all`].Arn' --output text)
 
 # Iterar a través de la lista de correos y crear usuarios en IAM con claves de acceso
 while IFS= read -r line
@@ -24,15 +24,18 @@ do
 
   # Crear el usuario IAM
   aws iam create-user --user-name "$username"
+  
+  # grega política al usuario
+  aws iam attach-user-policy --policy-arn "$policyIAM" --user-name "$username"
+  
+  # Crear un perfil de login para el usuario con contraseña
+  aws iam create-login-profile --user-name "$username" --password "$password"
 
   # Agregar el usuario al grupo IAM
   # aws iam add-user-to-group --user-name "$username" --group-name "$groupIAM"
 
   # Asignar una política que otorgue acceso completo a todos los servicios de AWS al usuario
   # aws iam attach-user-policy --policy-arn arn:aws:iam::aws:policy/AdministratorAccess --user-name "$username"
-
-  # Crear un perfil de login para el usuario con contraseña
-  aws iam create-login-profile --user-name "$username" --password "$password" # s--password-reset-required
 
   # Generar y mostrar las credenciales de acceso del usuario
   access_key_info=$(aws iam create-access-key --user-name "$username")
