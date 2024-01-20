@@ -14,7 +14,10 @@ do
   # Obteniendo el nombre de usuario y correo electrónico de la línea
   username=$(echo "$line" | cut -d"$fileDelimiter" -f1)
   email=$(echo "$line" | cut -d"$fileDelimiter" -f2)
-  password=$(echo "$line" | cut -d"$fileDelimiter" -f3)
+  # password=$(echo "$line" | cut -d"$fileDelimiter" -f3)
+  password=$(cat /dev/urandom | tr -dc 'a-z' | fold -w 6 | head -n 1)$(cat /dev/urandom | tr -dc 'A-Z' | fold -w 6 | head -n 1)$(cat /dev/urandom | tr -dc '0-9' | fold -w 6 | head -n 1)$(cat /dev/urandom | tr -dc '!@#$%^&*()_+' | fold -w 4 | head -n 1)
+
+  echo "Contraseña generada: $password"
 
   # Usuario
   echo "Usuario: $username, Correo: $email, Passord: $password"
